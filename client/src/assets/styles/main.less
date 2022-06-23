@@ -1,0 +1,218 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,300,400,700');
+
+@font-face {
+  font-family: 'Sailec-Bold';
+  src: url(../fonts/Sailec/Sailec_Bold.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Bold-Italic';
+  src: url(../fonts/Sailec/Sailec_Bold_Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Light-Italic';
+  src: url(../fonts/Sailec/Sailec_Light_Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Light';
+  src: url(../fonts/Sailec/Sailec_Light.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Medium-Italic';
+  src: url(../fonts/Sailec/Sailec_Medium_Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Medium';
+  src: url(../fonts/Sailec/Sailec_Medium.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Italic';
+  src: url(../fonts/Sailec/Sailec_Regular_Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec';
+  src: url(../fonts/Sailec/Sailec_Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Thin-Italic';
+  src: url(../fonts/Sailec/Sailec_Thin_Italic.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Sailec-Thin';
+  src: url(../fonts/Sailec/Sailec_Thin.ttf) format('truetype');
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  background: #f0f2f5;
+}
+
+.colorWeak {
+  filter: invert(80%);
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: unset;
+}
+
+.ant-notification-notice.ant-notification-notice-success {
+  background-color: #f6ffed;
+}
+
+.ant-notification-notice.ant-notification-notice-error {
+  background-color: #fff2f0;
+}
+
+.ant-notification-notice.ant-notification-notice-warn {
+  background-color: #fffbe6;
+}
+
+.ant-notification-notice.ant-notification-notice-info {
+  background-color: #e6f7ff;
+}
+
+canvas {
+  display: block;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  margin: 0;
+  color: rgba(0,0,0,.85);
+  font-size: 14px;
+  font-family: "Open Sans";
+  // font-family: -apple-system,BlinkMacSystemFont,segoe ui,Roboto,helvetica neue,Arial,noto sans,sans-serif,apple color emoji,segoe ui emoji,segoe ui symbol,noto color emoji;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  background-color: #fff;
+  font-feature-settings: "tnum","tnum";
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 7px;
+  margin-right: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: hsl(0deg 0% 33% / 40%);
+  box-shadow: 0 0 1px rgb(0 0 0 / 40%);
+}
+
+.status-campaign {
+  font-size: 14px;
+  line-height: 19px;
+  font-weight: bold;
+}
+
+.status-ready-errors,
+.status-ready,
+.status-active {
+  color: #2ED47A;
+}
+
+.status-done{
+  color: #333333;
+}
+
+.status-draft{
+  color: #FFB946;
+}
+
+.status-draftwitherrors,
+.status-error {
+  color: red;
+}
+
+.status-inprogress,
+.status-scheduled {
+  color: #8F4620;
+}
+
+.status-processing {
+  color: #553680;
+}
+
+.status-pending {
+  color: #8F4620;
+}
+
+.status-recived {
+  color: blue;
+}
+
+.status-send {
+  color: violet;
+}
+
+.status-campaign-enabled {
+  font-family: Open Sans;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.status-enabled-true {
+  color: #6579FF;
+}
+
+.status-enabled-false {
+  color: #999999;
+}
+
+
+.custom-alert-success {
+  border-radius: 5px;
+  background-color: rgba(46, 212, 122, 0.1);
+}
+
+.custom-alert-duplicate-success {
+  background-color: rgba(46, 212, 122, 0.1);
+  border-radius: 5px;
+  border: 0.5px solid #2ED47A;
+  .ant-notification-notice-message {
+    font-family: Sailec;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    color: #333333;
+  }
+}
+
+@media (max-width: @screen-xs) {
+  .ant-table {
+    width: 100%;
+    overflow-x: auto;
+    &-thead > tr,
+    &-tbody > tr {
+      > th,
+      > td {
+        white-space: pre;
+        > span {
+          display: block;
+        }
+      }
+    }
+  }
+}
+
+// Compatible with IE11
+@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
+  body .ant-design-pro > .ant-layout {
+    min-height: 100vh;
+  }
+}

@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "paths": {
+        "@modules": ["./modules"],
+        "@modules/*": ["./modules/*"],
+        "@common": ["./common"],
+        "@common/*": ["./common/*"],
+        "@interfaces/*": ["./interfaces/*"],
+        "@assets": ["./assets"],
+        "@assets/*": ["./assets/*"]
+      }
+    }
+  }

@@ -1,0 +1,84 @@
+.ant-pro-sider-logo img {
+    height: 29px;
+    width: 86px;
+  }
+  
+  .ant-pro-sider-collapsed img {
+    width: 35px;
+  }
+  
+  div#logo {
+    justify-content: space-between;
+    // height: 88px;
+  }
+  
+  .ant-layout-sider,
+  .ant-menu.ant-menu-dark, 
+  .ant-menu-dark .ant-menu-sub, 
+  .ant-menu.ant-menu-dark .ant-menu-sub {
+    background: #000000 !important;
+  }
+  
+  .ant-menu {
+    font-size: 14px !important;
+    font-weight: 400 !important;
+  }
+  
+  .ant-menu-item-selected {
+    background-color: #333333 !important;
+  }
+  
+  .ant-menu-vertical .ant-menu-item:after, 
+  .ant-menu-vertical-left .ant-menu-item:after, 
+  .ant-menu-vertical-right .ant-menu-item:after, 
+  .ant-menu-inline .ant-menu-item:after {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    border-left: 3px solid @primary-color !important;
+    transform: scaleY(1);
+    opacity: 0;
+    transition: transform .15s cubic-bezier(.215,.61,.355,1),opacity .15s cubic-bezier(.215,.61,.355,1);
+    content: "";
+  }
+  
+  .ant-pro-sider-menu {
+    .ant-menu-item {
+      height: 40px !important;
+      display: flex;
+      align-items: center;
+    }
+  }
+  
+  .ant-pro-menu-item-title {
+    font-family: Sailec;
+    font-size: 14px;
+  }
+  
+  .ant-tooltip-inner {
+    .ant-pro-menu-item {
+      .ant-pro-menu-item-title {
+        margin-left: 8px;
+      }
+    }
+  }
+  
+  .ant-menu-inline-collapsed-tooltip  a {
+    color: white;
+    &:hover {
+      color: white;
+    }
+  }
+  
+  .alert-global {
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 16px;
+    color: #333333;
+    a {
+      text-decoration: underline;
+    }
+  }
