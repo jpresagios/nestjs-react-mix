@@ -66,4 +66,18 @@ describe('GateWayController (e2e)', () => {
     expect(result.status).toBe(200);
     expect(data.length).toEqual(gateWayFakeData.length);
   });
+
+
+  it('/gateways (GET) detail endpoint',  async () => {
+    const gateWay = gateWayFakeData[0];
+
+    const resultDB = await gatewayModel.create(gateWay);
+
+    const {body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).get(`/gateway/${resultDB._id}`);
+
+    
+    expect(name).toEqual(gateWay.name);
+    expect(serialNumber).toEqual(gateWay.serialNumber);
+    expect(ipV4).toEqual(gateWay.ipV4);
+  });
 });
