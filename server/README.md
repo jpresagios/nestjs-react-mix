@@ -44,6 +44,12 @@ Run the app tests
 npm run test
 ```
 
+Run fixtures to populate the DB with initial data
+
+```
+npm run fixtures
+```
+
 ## Deploy
 
 ```
