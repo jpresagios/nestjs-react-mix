@@ -17,7 +17,7 @@ const WrapperRouteComponent: FC<WrapperRouteProps> = ({
 
   return (
     <Suspense fallback={<PageLoading />}>
-        {element}
+      {element}
     </Suspense>
   );
 };

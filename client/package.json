@@ -14,7 +14,10 @@
     "@types/react": "^18.0.0",
     "@types/react-dom": "^18.0.0",
     "antd": "^4.21.3",
+    "axios": "^0.27.2",
+    "craco-alias": "^3.0.1",
     "craco-less": "^2.0.0",
+    "env-cmd": "^10.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.3.0",
@@ -24,10 +27,25 @@
     "web-vitals": "^2.1.0"
   },
   "scripts": {
-    "eject": "react-scripts eject",
-    "start": "craco start",
-    "build": "craco build",
-    "test": "craco test"
+    "start": "env-cmd -e stage craco start",
+    "start:dev": "env-cmd -e dev craco start",
+    "start:stage": "env-cmd -e stage craco start",
+    "start:prod": "env-cmd -e prod craco start",
+    "build:dev": "env-cmd -e dev craco build",
+    "build:qa": "env-cmd -e qa craco build",
+    "build:stage": "env-cmd -e stage craco build",
+    "build:prod": "env-cmd -e prod craco build",
+    "test": "craco test",
+    "eject": "craco eject",
+    "lint": "eslint . --ext ts --ext tsx --ext js --fix"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,md,html,css,less}": "lint"
   },
   "eslintConfig": {
     "extends": [
@@ -50,6 +68,16 @@
   "devDependencies": {
     "@types/dotenv": "^8.2.0",
     "@types/styled-components": "^5.1.25",
-    "dotenv": "^16.0.1"
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
+    "@typescript-eslint/parser": "^5.29.0",
+    "dotenv": "^16.0.1",
+    "eslint": "^8.18.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.30.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.1",
+    "lint-staged": "^13.0.2"
   }
 }

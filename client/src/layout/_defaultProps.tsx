@@ -1,5 +1,5 @@
 import {
-  GatewayOutlined
+  GatewayOutlined,
 } from '@ant-design/icons';
 
 // eslint-disable-next-line import/no-anonymous-default-export

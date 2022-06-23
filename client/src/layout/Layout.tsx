@@ -3,8 +3,8 @@ import { Outlet, useLocation, useNavigate } from 'react-router';
 import {
   Grid,
 } from 'antd';
-import { SwitcherOutlined } from '@ant-design/icons'
 import {
+  SwitcherOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
@@ -29,7 +29,7 @@ const Layout: React.FC = () => {
   const screens = useBreakpoint();
   const navigate = useNavigate();
 
-  const [collapsed, setCollapsed] = useState<boolean>(false)
+  const [collapsed, setCollapsed] = useState<boolean>(false);
 
   useEffect(() => {
     if (location.pathname === '/') {
@@ -41,7 +41,7 @@ const Layout: React.FC = () => {
 
   const toggleCollapsed = () => {
     localStorage.setItem('collapsed', String(!collapsed));
-    setCollapsed(!collapsed)
+    setCollapsed(!collapsed);
   };
 
   return (
@@ -65,7 +65,8 @@ const Layout: React.FC = () => {
         onCollapse={toggleCollapsed}
         collapsed={collapsed}
         collapsedButtonRender={false}
-        logo={!screens.xs ? <SwitcherOutlined style={{color: 'wheat', fontSize: 38}}/> : null}
+        logo={!screens.xs ? <SwitcherOutlined style={{ color: 'wheat', fontSize: 38 }} /> : null}
+        // eslint-disable-next-line react/no-unstable-nested-components
         menuHeaderRender={(logo: any) => (
           <>
             <span
@@ -89,6 +90,7 @@ const Layout: React.FC = () => {
             )}
           </>
         )}
+        // eslint-disable-next-line react/no-unstable-nested-components
         headerContentRender={() => (collapsed ? (
           <div
             onClick={toggleCollapsed}
@@ -101,6 +103,7 @@ const Layout: React.FC = () => {
           </div>
         ) : null)}
         // formatMessage={(message) => formatMessage(message)}
+        // eslint-disable-next-line react/no-unstable-nested-components
         menuItemRender={(menuItemProps: any, defaultDom: any) => {
           if (menuItemProps.isUrl || menuItemProps.children || !menuItemProps.path) {
             return defaultDom;

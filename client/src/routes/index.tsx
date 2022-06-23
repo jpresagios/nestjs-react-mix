@@ -8,7 +8,6 @@ import importRetry from './importRetry';
 const Gateway = lazy(() => importRetry(() => import('../modules/gateway/containers/index')));
 const NotFound = lazy(() => importRetry(() => import('../modules/pages/404')));
 
-
 const routeList: RouteObject[] = [
   {
     path: '/',

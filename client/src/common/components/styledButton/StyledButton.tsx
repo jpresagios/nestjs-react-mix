@@ -77,6 +77,7 @@ const typeLink = css`
   }
 `;
 
+// eslint-disable-next-line import/prefer-default-export
 export const StyledButton = styled(AntButton)`
   font-family: Open Sans;
   font-style: normal;

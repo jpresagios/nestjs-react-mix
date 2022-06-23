@@ -1,10 +1,10 @@
 const importRetry = (
-    fn: () => Promise<{
+  fn: () => Promise<{
         default: React.ComponentType<any>;
       }>,
-    retriesLeft = 100,
-    interval = 1000,
-  ) => new Promise<{
+  retriesLeft = 100,
+  interval = 1000,
+) => new Promise<{
         default: React.ComponentType<any>;
       }>((resolve, reject) => {
         fn()
@@ -20,12 +20,11 @@ const importRetry = (
                   reject(error);
                   return;
                 }
-  
+
                 importRetry(fn, retriesLeft - 1, interval).then(resolve, reject);
               }, interval);
             }
           });
       });
-  
-  export default importRetry;
-  
+
+export default importRetry;
