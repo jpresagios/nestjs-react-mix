@@ -17,6 +17,7 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "fixtures": "ts-node ./src/fixtures.ts",
+    "fixtures:start": "npm run fixtures && npm run start",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json"
