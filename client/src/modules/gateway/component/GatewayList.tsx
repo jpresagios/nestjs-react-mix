@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProTable from '@ant-design/pro-table';
 import type { ProColumns, ActionType } from '@ant-design/pro-table';
 import styled from 'styled-components';
@@ -29,6 +29,8 @@ interface GatewayListI {
 }
 
 export default function GatewayList({ gatewayList }: GatewayListI) {
+  const actionRef = useRef<ActionType>();
+
   const columns: ProColumns<GatewayI>[] = [
     {
       title: <span style={{ marginLeft: 16 }}>Serial Number</span>,
@@ -62,9 +64,14 @@ export default function GatewayList({ gatewayList }: GatewayListI) {
     },
   ];
 
+  useEffect(() => {
+    actionRef?.current?.reload();
+  }, [gatewayList]);
+
   return (
     <ProTable<GatewayI>
       className="custom-table-gateways"
+      actionRef={actionRef}
       columns={columns}
       rowKey="_id"
       rowClassName={() => ('custom-row')}
