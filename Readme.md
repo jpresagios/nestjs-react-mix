@@ -33,14 +33,21 @@ https://docs.docker.com/compose/install/
 docker-compose up --build
 ```
 
-Once the Docker containers that run the app are up you can review the app from:
-
-```
-http://localhost:3000
-```
+Once the Docker containers are running you can access the backend and frontend application:
 
 API Rest documentation contract can find in 
 
 ```
 http://localhost:3000/swagger
+```
+
+API Rest uri
+
+```
+http://localhost:3000
+```
+
+Frontend application
+```
+http://localhost:3001
 ```
