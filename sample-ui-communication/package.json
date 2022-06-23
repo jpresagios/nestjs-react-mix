@@ -1,0 +1,14 @@
+{
+  "name": "sample-ui-communication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "sample-client.js",
+  "scripts": {
+    "start": "node sample-client.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
