@@ -80,4 +80,15 @@ describe('GateWayController (e2e)', () => {
     expect(serialNumber).toEqual(gateWay.serialNumber);
     expect(ipV4).toEqual(gateWay.ipV4);
   });
+
+
+  it('/gateways (POST) endpoint inserted new gateways',  async () => {
+    const gateWay = gateWayFakeData[0];
+    const {body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).post('/gateway').send(gateWay);
+
+    
+    expect(name).toEqual(gateWay.name);
+    expect(serialNumber).toEqual(gateWay.serialNumber);
+    expect(ipV4).toEqual(gateWay.ipV4);
+  });
 });
