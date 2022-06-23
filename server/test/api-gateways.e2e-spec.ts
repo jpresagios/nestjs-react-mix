@@ -5,16 +5,31 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { GatewaysModule } from './../src/gateways/gateways.module';
 import {
-  GateWaySchema,
-  IGateWay,
+  GateWay,
+  GateWaySchema
 } from './../src/gateways/models/gateway.schema';
-import { Connection, connect, Model } from 'mongoose';
+import mongoose, { Connection, connect, Model } from 'mongoose';
+import gateWayFakeData from './fakedata/gateway';
 
 describe('GateWayController (e2e)', () => {
   let app: INestApplication;
   let moduleFixture;
   let mongoConnection: Connection;
-  let gatewayModel: Model<IGateWay>;
+  let gatewayModel: Model<GateWay>;
+
+  afterEach(async () => {
+    const collections = mongoose.connection.collections;
+
+    for (const key in collections) {
+      const collection = collections[key];
+      await collection.deleteMany({});
+    }
+  });
+
+  afterAll(done => {
+      app.close()
+      done();
+  })
 
   beforeAll(async () => {
     // await connect();
@@ -39,25 +54,16 @@ describe('GateWayController (e2e)', () => {
     await app.init();
   });
 
-  it('/gateways (GET)', async () => {
-    await gatewayModel.create({
-      serialNumber: 'casad',
-      ipV4: '4.5.5.5',
-      name: '3434',
-    });
-
-    await gatewayModel.create({
-      serialNumber: 'anottttttttttttttthier Junior Paz Formoso',
-      ipV4: '4.5.5.5',
-      name: '3434',
-    });
+  it('/gateways (GET) new endpoint insert',  async () => {
+    for (let i = 0; i < gateWayFakeData.length; i++) {
+      await gatewayModel.create(gateWayFakeData[i]);
+    }
 
     const result = await request(app.getHttpServer()).get('/gateway');
 
-    const res = JSON.parse(result.text);
+    const data = JSON.parse(result.text);
 
-    console.log('tttttttttttttttttttttt');
-    console.log(res);
-    console.log('tttttttttttttttttttttt');
+    expect(result.status).toBe(200);
+    expect(data.length).toEqual(gateWayFakeData.length);
   });
 });
