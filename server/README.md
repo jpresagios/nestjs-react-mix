@@ -50,24 +50,8 @@ Run fixtures to populate the DB with initial data
 npm run fixtures
 ```
 
-## Deploy
+Run fixtures and start the app
 
 ```
-https://docs.docker.com/compose/install/
-```
-
-```
-docker-compose up --build
-```
-
-Once the Docker containers that run the app are up you can review the app from:
-
-```
-http://localhost:3000
-```
-
-API Rest documentation contract can find in 
-
-```
-http://localhost:3000/swagger
+npm run fixtures:start
 ```
