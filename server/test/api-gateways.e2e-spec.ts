@@ -54,7 +54,7 @@ describe('GateWayController (e2e)', () => {
     await app.init();
   });
 
-  it('/gateways (GET) new endpoint insert',  async () => {
+  it('/gateways (GET) returned all the gateways in the DB',  async () => {
     for (let i = 0; i < gateWayFakeData.length; i++) {
       await gatewayModel.create(gateWayFakeData[i]);
     }
