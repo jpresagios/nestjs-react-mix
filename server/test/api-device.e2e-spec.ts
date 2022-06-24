@@ -91,4 +91,50 @@ describe('DeviceController (e2e)', () => {
 
     expect(numberDevicesAfterCallEndpoint).toEqual(1);
   });
+
+  it('/device (POST) bad request with empty uid',  async () => {
+    const gateWayDB = await gatewayModel.create(gateWayFakeData[0]);
+
+    const device = {
+      idGateWay: gateWayDB._id,
+      vendor: "vendor1",
+      status: "online",
+    };
+
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
+    
+    expect(status).toEqual(400);
+    expect(message).toEqual(['uid should not be empty']);
+  });
+
+  it('/device (POST) bad request with empty vendor',  async () => {
+    const gateWayDB = await gatewayModel.create(gateWayFakeData[0]);
+
+    const device = {
+      idGateWay: gateWayDB._id,
+      uid: 4,
+      status: "online",
+    };
+
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
+    
+    expect(status).toEqual(400);
+    expect(message).toEqual(['vendor should not be empty']);
+  });
+
+
+  it('/device (POST) bad request with empty status',  async () => {
+    const gateWayDB = await gatewayModel.create(gateWayFakeData[0]);
+
+    const device = {
+      idGateWay: gateWayDB._id,
+      uid: 4,
+      vendor: "vendor1"
+    };
+
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
+    
+    expect(status).toEqual(400);
+    expect(message).toEqual(['status should not be empty']);
+  });
 });
