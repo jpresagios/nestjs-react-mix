@@ -107,7 +107,7 @@ export default function Detail() {
         loading={loading}
         style={{ marginTop: 17 }}
         bodyStyle={{
-          padding: '20px',
+          padding: 20,
         }}
       >
         <Row gutter={16}>

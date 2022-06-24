@@ -91,7 +91,7 @@ export default function index() {
         loading={loading}
         style={{ marginTop: 17 }}
         bodyStyle={{
-          padding: '0px',
+          padding: 20,
         }}
       >
         <GatewayList gatewayList={data} />

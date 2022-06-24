@@ -19,13 +19,11 @@ export default function GatewayList({ gatewayList }: GatewayListI) {
       title: 'Serial Number',
       dataIndex: 'serialNumber',
       key: 'serialNumber',
-      render: (_, { serialNumber }) => <a>{serialNumber}</a>,
     },
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (_, { name }) => <a>{name}</a>,
     },
     {
       title: 'IpV4',
