@@ -13,6 +13,7 @@ import {
 } from './../src/gateways/models/gateway.schema';
 import mongoose, { Connection, connect, Model } from 'mongoose';
 import gateWayFakeData from './fakedata/gateway';
+import { ValidationExceptionFilter } from './../src/exception-filter';
 
 describe('GateWayController (e2e)', () => {
   let app: INestApplication;
@@ -57,6 +58,7 @@ describe('GateWayController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({
       exceptionFactory: (errors) => new BadRequestException(errors)
     }));
+    app.useGlobalFilters(new ValidationExceptionFilter())
 
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     await app.init();
@@ -103,41 +105,38 @@ describe('GateWayController (e2e)', () => {
 
   it('/gateways (POST) bad request with invalid ipV4',  async () => {
     
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/gateway').send({
       serialNumber: "serial1",
       name: "name1",
       ipV4: "270.4.17.5",
     });
     
-    const errorFromAPI = Object.values(message[0].constraints);
+    
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['IPV4 is not valid']);
+    expect(error[0].message).toEqual('IPV4 is not valid');
   });
 
   it('/gateways (POST) bad request with empty name',  async () => {
     
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/gateway').send({
       serialNumber: "serial1",
       ipV4: "27.4.17.5",
     });
 
-    const errorFromAPI = Object.values(message[0].constraints);
-
+    
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['name should not be empty']);
+    expect(error[0].message).toEqual('name should not be empty');
   });
 
   it('/gateways (POST) bad request with empty serialNumber',  async () => {
     
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/gateway').send({
       name: "name1",
       ipV4: "27.4.17.5",
     });
 
-    const errorFromAPI = Object.values(message[0].constraints);
-
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['serialNumber should not be empty']);
+    expect(error[0].message).toEqual('serialNumber should not be empty');
   });
 
 
@@ -149,15 +148,13 @@ describe('GateWayController (e2e)', () => {
       serialNumber: "serial1"
     });
 
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/gateway').send({
       name: "name1",
       ipV4: "27.4.17.5",
       serialNumber: "serial1"
     });
 
-    const errorFromAPI = Object.values(message[0].constraints);
-
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['serialNumber must be unique']);
+    expect(error[0].message).toEqual('serialNumber must be unique');
   });
 });

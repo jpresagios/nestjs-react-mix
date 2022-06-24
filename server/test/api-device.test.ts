@@ -19,6 +19,7 @@ import {
 
 import mongoose, { Connection, connect, Model } from 'mongoose';
 import gateWayFakeData from './fakedata/gateway';
+import { ValidationExceptionFilter } from './../src/exception-filter';
 
 describe('DeviceController (e2e)', () => {
   let app: INestApplication;
@@ -64,6 +65,7 @@ describe('DeviceController (e2e)', () => {
     app.useGlobalPipes(new ValidationPipe({
       exceptionFactory: (errors) => new BadRequestException(errors)
     }));
+    app.useGlobalFilters(new ValidationExceptionFilter())
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     deviceModel = mongoConnection.model('DeviceSchema', DeviceSchema);
     
@@ -103,12 +105,11 @@ describe('DeviceController (e2e)', () => {
       status: "online",
     };
 
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
-    
-    const errorFromAPI = Object.values(message[0].constraints);
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/device').send(device);
+  
 
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['uid should not be empty']);
+    expect(error[0].message).toEqual('uid should not be empty');
   });
 
   it('/device (POST) bad request with empty vendor',  async () => {
@@ -120,12 +121,10 @@ describe('DeviceController (e2e)', () => {
       status: "online",
     };
 
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
-    
-    const errorFromAPI = Object.values(message[0].constraints);
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/device').send(device);
 
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['vendor should not be empty']);
+    expect(error[0].message).toEqual('vendor should not be empty');
   });
 
 
@@ -138,11 +137,8 @@ describe('DeviceController (e2e)', () => {
       vendor: "vendor1"
     };
 
-    const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
-
-    const errorFromAPI = Object.values(message[0].constraints);
-
+    const {status, body: {error}} = await request(app.getHttpServer()).post('/device').send(device);
     expect(status).toEqual(400);
-    expect(errorFromAPI).toEqual(['status should not be empty']);
+    expect(error[0].message).toEqual('status should not be empty');
   });
 });
