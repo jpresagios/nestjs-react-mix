@@ -4,9 +4,12 @@ import * as request from 'supertest';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import { GatewaysModule } from './../src/gateways/gateways.module';
+import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+
 import {
   GateWay,
-  GateWaySchema
+  GateWaySchema,
 } from './../src/gateways/models/gateway.schema';
 import mongoose, { Connection, connect, Model } from 'mongoose';
 import gateWayFakeData from './fakedata/gateway';
@@ -18,6 +21,7 @@ describe('GateWayController (e2e)', () => {
   let gatewayModel: Model<GateWay>;
 
   afterEach(async () => {
+    // gatewayModel.deleteMany({});
     const collections = mongoose.connection.collections;
 
     for (const key in collections) {
@@ -32,7 +36,6 @@ describe('GateWayController (e2e)', () => {
   })
 
   beforeAll(async () => {
-    // await connect();
     moduleFixture = await Test.createTestingModule({
       imports: [
         MongooseModule.forRootAsync({
@@ -50,6 +53,9 @@ describe('GateWayController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    useContainer(app.select(GatewaysModule), { fallbackOnErrors: true });
+    app.useGlobalPipes(new ValidationPipe());
+
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     await app.init();
   });
@@ -73,8 +79,8 @@ describe('GateWayController (e2e)', () => {
 
     const resultDB = await gatewayModel.create(gateWay);
 
-    const {body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).get(`/gateway/${resultDB._id}`);
-
+    const {status, body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).get(`/gateway/${resultDB._id}`);
+    expect(status).toBe(200);
     
     expect(name).toEqual(gateWay.name);
     expect(serialNumber).toEqual(gateWay.serialNumber);
@@ -84,11 +90,65 @@ describe('GateWayController (e2e)', () => {
 
   it('/gateways (POST) endpoint inserted new gateways',  async () => {
     const gateWay = gateWayFakeData[0];
-    const {body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).post('/gateway').send(gateWay);
-
+    const {status, body: {name, serialNumber, ipV4}} = await request(app.getHttpServer()).post('/gateway').send(gateWay);
+    expect(status).toBe(201);
     
     expect(name).toEqual(gateWay.name);
     expect(serialNumber).toEqual(gateWay.serialNumber);
     expect(ipV4).toEqual(gateWay.ipV4);
+  });
+
+
+  it('/gateways (POST) bad request with invalid ipV4',  async () => {
+    
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+      name: "name1",
+      serialNumber: "serial1",
+      ipV4: "270.4.17.5",
+    });
+
+    expect(status).toEqual(400);
+    expect(message).toEqual(['IPV4 is not valid']);
+  });
+
+  it('/gateways (POST) bad request with empty name',  async () => {
+    
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+      serialNumber: "serial1",
+      ipV4: "27.4.17.5",
+    });
+
+    expect(status).toEqual(400);
+    expect(message).toEqual(['name should not be empty']);
+  });
+
+  it('/gateways (POST) bad request with empty serialNumber',  async () => {
+    
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+      name: "name1",
+      ipV4: "27.4.17.5",
+    });
+
+    expect(status).toEqual(400);
+    expect(message).toEqual(['serialNumber should not be empty']);
+  });
+
+
+  it('/gateways (POST) bad request with duplicate serialNumber',  async () => {
+    
+    await gatewayModel.create({
+      name: "name2",
+      ipV4: "27.4.16.5",
+      serialNumber: "serial1"
+    });
+
+    const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
+      name: "name1",
+      ipV4: "27.4.17.5",
+      serialNumber: "serial1"
+    });
+
+    expect(status).toEqual(400);
+    expect(message).toEqual(['serialNumber must be unique']);
   });
 });
