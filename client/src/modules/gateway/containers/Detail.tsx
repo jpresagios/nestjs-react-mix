@@ -1,19 +1,18 @@
+/* eslint-disable no-bitwise */
 import { useState } from 'react';
 import {
-  Card, Typography, Button, Modal, Form, Input as AntInput, Alert, Col, Row, Statistic,
+  Card, Typography, Button, Modal, Form, Input as AntInput, Col, Row, Statistic, Switch,
 } from 'antd';
 import {
   PlusOutlined,
-  CheckCircleTwoTone,
 } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import useFetch from '../../../hooks/useFetch';
-import { getGatewayDetail } from '../../../services/gateway';
+import { getGatewayDetail, createDevice } from '../../../services/gateway';
 import { openNotificationWithIcon } from '../../../common/notifications/notifications';
-import { GatewayDetailI } from '../../../interfaces/gateway';
+import { GatewayDetailI, DevicePayloadI } from '../../../interfaces/gateway';
 import '../styles/index.less';
-import GatewayList from '../component/GatewayList';
 import DeviceList from '../component/DeviceList';
 
 const { Title } = Typography;
@@ -33,6 +32,9 @@ export default function Detail() {
     ipV4: '',
     devices: [],
   });
+  const [form] = Form.useForm();
+  const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+  const [visible, setVisible] = useState<boolean>(false);
 
   const { loading } = useFetch(
     getGatewayDetail(id),
@@ -43,6 +45,57 @@ export default function Detail() {
       openNotificationWithIcon('error', 'Error', error.message);
     },
   );
+
+  const showModal = () => {
+    setVisible(true);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  const handleOk = () => {
+    form.submit();
+  };
+
+  const onFinish = (values: DevicePayloadI) => {
+    const payload: DevicePayloadI = {
+      ...values,
+      idGateway: id,
+      status: values.status ? 'online' : 'offline',
+    };
+    setConfirmLoading(true);
+    createDevice(payload)
+      .then((response) => {
+        const {
+          data: {
+            uid, vendor, status, _id, createAt,
+          },
+        } = response;
+        const newDevice = {
+          uid, vendor, status, _id, createAt,
+        };
+        setGatewayD({
+          ...gatewayD,
+          devices: [newDevice, ...gatewayD.devices],
+        });
+        form.resetFields();
+        setConfirmLoading(false);
+        setVisible(false);
+      })
+      .catch(() => {
+        openNotificationWithIcon('error', 'Error', 'Something went wrong :(');
+        setConfirmLoading(false);
+      });
+  };
+
+  const onDeleteDevice = (deviceId: string) => {
+    setGatewayD({
+      ...gatewayD,
+      // eslint-disable-next-line no-underscore-dangle
+      devices: gatewayD.devices.filter((device) => device._id !== deviceId),
+    });
+  };
 
   return (
     <>
@@ -77,12 +130,47 @@ export default function Detail() {
             type="primary"
             icon={<PlusOutlined />}
             size="large"
+            onClick={showModal}
           >
             Create
           </Button>
         </StyledDivContainer>
-        <DeviceList deviceList={gatewayD.devices} />
+        <DeviceList deviceList={gatewayD.devices} onDeleteDevice={onDeleteDevice} />
       </Card>
+      <Modal
+        title="Create device"
+        visible={visible}
+        confirmLoading={confirmLoading}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Form
+          form={form}
+          layout="vertical"
+          name="form_in_modal"
+          onFinish={onFinish}
+        >
+          <Form.Item
+            name="uid"
+            rules={[{ required: true, message: 'Required' }]}
+          >
+            <AntInput type="number" suffix={<span />} size="large" placeholder="Uid" />
+          </Form.Item>
+          <Form.Item
+            name="vendor"
+            rules={[{ required: true, message: 'Required' }]}
+          >
+            <AntInput suffix={<span />} size="large" placeholder="Vendor" />
+          </Form.Item>
+          <Form.Item
+            name="status"
+            valuePropName="checked"
+            initialValue
+          >
+            <Switch defaultChecked />
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 }

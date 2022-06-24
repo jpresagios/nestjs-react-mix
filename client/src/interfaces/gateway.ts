@@ -20,3 +20,9 @@ export interface DeviceI {
   vendor: string;
   _id: string;
 }
+export interface DevicePayloadI {
+  uid: string;
+  vendor: string;
+  status: string;
+  idGateway?: string;
+}

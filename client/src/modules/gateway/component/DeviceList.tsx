@@ -1,16 +1,22 @@
+import { useState } from 'react';
 import {
-  Space, Table, Button, Tooltip, Badge,
+  Space, Table, Button, Tooltip, Badge, Modal,
 } from 'antd';
-import { CheckCircleTwoTone, CloseCircleOutlined, DeleteOutlined } from '@ant-design/icons';
+import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/lib/table';
 import { DeviceI } from '../../../interfaces/gateway';
+import { deleteDevice } from '../../../services/gateway';
 import './list-row.less';
+import { openNotificationWithIcon } from '../../../common/notifications/notifications';
 
 interface DeviceListI {
   deviceList: DeviceI[];
+  onDeleteDevice: (id: string)=>void
 }
 
-export default function DeviceList({ deviceList }:DeviceListI) {
+const { confirm } = Modal;
+
+export default function DeviceList({ deviceList, onDeleteDevice }:DeviceListI) {
   const columns: ColumnsType<DeviceI> = [
     {
       title: 'Uid',
@@ -34,11 +40,7 @@ export default function DeviceList({ deviceList }:DeviceListI) {
       key: 'action',
       align: 'center',
       render: (_, { _id }) => (
-        <Space size="middle">
-          <Tooltip title="Detail">
-            <Button type="primary" shape="circle" icon={<DeleteOutlined />} danger />
-          </Tooltip>
-        </Space>
+        <HandleDeleteOption id={_id} onDeleteDevice={onDeleteDevice} />
       ),
     },
   ];
@@ -47,3 +49,50 @@ export default function DeviceList({ deviceList }:DeviceListI) {
     <Table rowKey="_id" rowClassName="gateway-list" columns={columns} dataSource={deviceList} />
   );
 }
+
+interface IHandleDeleteOptionProps {
+  id: string;
+  onDeleteDevice: (id: string)=>void
+}
+
+const HandleDeleteOption = ({ id, onDeleteDevice }:IHandleDeleteOptionProps) => {
+  const [loading, setLoading] = useState(false);
+
+  const showDeleteConfirm = () => {
+    confirm({
+      title: 'Are you sure delete this device?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'If you remove it you can revert this action',
+      okText: 'Yes',
+      okType: 'danger',
+      cancelText: 'No',
+      onOk() {
+        setLoading(true);
+        deleteDevice(id)
+          .then((resp) => {
+            setLoading(false);
+            onDeleteDevice(id);
+          })
+          .catch(() => {
+            setLoading(false);
+            openNotificationWithIcon('error', 'Error', 'Something went wrong :(');
+          });
+      },
+    });
+  };
+
+  return (
+    <Space size="middle">
+      <Tooltip title="Detail">
+        <Button
+          loading={loading}
+          type="primary"
+          shape="circle"
+          icon={<DeleteOutlined />}
+          danger
+          onClick={showDeleteConfirm}
+        />
+      </Tooltip>
+    </Space>
+  );
+};
