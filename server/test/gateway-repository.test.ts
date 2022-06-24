@@ -83,4 +83,18 @@ describe('GateWayRepository service', () => {
     const totalGateWays: number = await gatewayModel.count({});
     expect(totalGateWays).toEqual(gateWayFakeData.length);
   });
+
+
+  it('test /gateway repository detail method',  async () => {
+    const gateWay = gateWayFakeData[0];
+
+    const gateWayResult = await gateWayServiceRepository.insert(gateWay);
+    const gateWayDetail = await gateWayServiceRepository.findById(gateWayResult._id);
+
+    const { _id, serialNumber, name, ipV4 } = gateWayDetail;
+    expect(_id).toEqual(gateWayResult._id);
+    expect(serialNumber).toEqual(gateWayResult.serialNumber);
+    expect(name).toEqual(gateWayResult.name);
+    expect(ipV4).toEqual(gateWayResult.ipV4);
+  });
 });
