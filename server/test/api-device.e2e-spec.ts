@@ -28,7 +28,6 @@ describe('DeviceController (e2e)', () => {
   let deviceModel: Model<Device>;
 
   afterEach(async () => {
-    // gatewayModel.deleteMany({});
     const collections = mongoose.connection.collections;
 
     for (const key in collections) {
@@ -60,11 +59,12 @@ describe('DeviceController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+
     useContainer(app.select(GatewaysModule), { fallbackOnErrors: true });
     app.useGlobalPipes(new ValidationPipe());
-
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     deviceModel = mongoConnection.model('DeviceSchema', DeviceSchema);
+    
     await app.init();
   });
 
