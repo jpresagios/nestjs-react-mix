@@ -11,10 +11,10 @@ export class ValidationExceptionFilter implements ExceptionFilter<BadRequestExce
         const errors = Object.values(error.constraints);
 
         if (errors.length == 1) {
-            return {'field': error.property, error: Object.values(error.constraints)[0]};
+            return {'field': error.property, message: Object.values(error.constraints)[0]};
         }
 
-        return {'field': error.property, error: Object.values(error.constraints)};;
+        return {'field': error.property, message: Object.values(error.constraints)};;
     });
 
     response
