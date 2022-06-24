@@ -3,14 +3,17 @@ import {
 } from 'antd';
 import { EyeOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/lib/table';
+import { useNavigate } from 'react-router-dom';
 import { GatewayI } from '../../../interfaces/gateway';
-import './gateway-list.less';
+import './list-row.less';
 
 interface GatewayListI {
   gatewayList: GatewayI[];
 }
 
 export default function GatewayList({ gatewayList }: GatewayListI) {
+  const navigate = useNavigate();
+
   const columns: ColumnsType<GatewayI> = [
     {
       title: 'Serial Number',
@@ -33,10 +36,10 @@ export default function GatewayList({ gatewayList }: GatewayListI) {
       title: 'Action',
       key: 'action',
       align: 'center',
-      render: (_, record) => (
+      render: (_, { _id }) => (
         <Space size="middle">
           <Tooltip title="Detail">
-            <Button type="primary" shape="circle" icon={<EyeOutlined />} />
+            <Button type="primary" shape="circle" icon={<EyeOutlined />} onClick={() => navigate(`/gateway/${_id}`)} />
           </Tooltip>
         </Space>
       ),
@@ -44,6 +47,6 @@ export default function GatewayList({ gatewayList }: GatewayListI) {
   ];
 
   return (
-    <Table rowClassName="gateway-list" columns={columns} dataSource={gatewayList} />
+    <Table rowKey="_id" rowClassName="gateway-list" columns={columns} dataSource={gatewayList} />
   );
 }
