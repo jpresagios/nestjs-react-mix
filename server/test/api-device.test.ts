@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -61,7 +61,9 @@ describe('DeviceController (e2e)', () => {
     app = moduleFixture.createNestApplication();
 
     useContainer(app.select(GatewaysModule), { fallbackOnErrors: true });
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({
+      exceptionFactory: (errors) => new BadRequestException(errors)
+    }));
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     deviceModel = mongoConnection.model('DeviceSchema', DeviceSchema);
     
@@ -103,8 +105,10 @@ describe('DeviceController (e2e)', () => {
 
     const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
     
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['uid should not be empty']);
+    expect(errorFromAPI).toEqual(['uid should not be empty']);
   });
 
   it('/device (POST) bad request with empty vendor',  async () => {
@@ -118,8 +122,10 @@ describe('DeviceController (e2e)', () => {
 
     const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
     
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['vendor should not be empty']);
+    expect(errorFromAPI).toEqual(['vendor should not be empty']);
   });
 
 
@@ -133,8 +139,10 @@ describe('DeviceController (e2e)', () => {
     };
 
     const {status, body: {message}} = await request(app.getHttpServer()).post('/device').send(device);
-    
+
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['status should not be empty']);
+    expect(errorFromAPI).toEqual(['status should not be empty']);
   });
 });

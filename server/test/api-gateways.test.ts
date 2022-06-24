@@ -1,5 +1,5 @@
 import { Test } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import { BadRequestException, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { MongooseModule } from '@nestjs/mongoose';
 import { MongoMemoryServer } from 'mongodb-memory-server';
@@ -54,7 +54,9 @@ describe('GateWayController (e2e)', () => {
 
     app = moduleFixture.createNestApplication();
     useContainer(app.select(GatewaysModule), { fallbackOnErrors: true });
-    app.useGlobalPipes(new ValidationPipe());
+    app.useGlobalPipes(new ValidationPipe({
+      exceptionFactory: (errors) => new BadRequestException(errors)
+    }));
 
     gatewayModel = mongoConnection.model('GateWaySchema', GateWaySchema);
     await app.init();
@@ -102,13 +104,14 @@ describe('GateWayController (e2e)', () => {
   it('/gateways (POST) bad request with invalid ipV4',  async () => {
     
     const {status, body: {message}} = await request(app.getHttpServer()).post('/gateway').send({
-      name: "name1",
       serialNumber: "serial1",
+      name: "name1",
       ipV4: "270.4.17.5",
     });
-
+    
+    const errorFromAPI = Object.values(message[0].constraints);
     expect(status).toEqual(400);
-    expect(message).toEqual(['IPV4 is not valid']);
+    expect(errorFromAPI).toEqual(['IPV4 is not valid']);
   });
 
   it('/gateways (POST) bad request with empty name',  async () => {
@@ -118,8 +121,10 @@ describe('GateWayController (e2e)', () => {
       ipV4: "27.4.17.5",
     });
 
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['name should not be empty']);
+    expect(errorFromAPI).toEqual(['name should not be empty']);
   });
 
   it('/gateways (POST) bad request with empty serialNumber',  async () => {
@@ -129,8 +134,10 @@ describe('GateWayController (e2e)', () => {
       ipV4: "27.4.17.5",
     });
 
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['serialNumber should not be empty']);
+    expect(errorFromAPI).toEqual(['serialNumber should not be empty']);
   });
 
 
@@ -148,7 +155,9 @@ describe('GateWayController (e2e)', () => {
       serialNumber: "serial1"
     });
 
+    const errorFromAPI = Object.values(message[0].constraints);
+
     expect(status).toEqual(400);
-    expect(message).toEqual(['serialNumber must be unique']);
+    expect(errorFromAPI).toEqual(['serialNumber must be unique']);
   });
 });
