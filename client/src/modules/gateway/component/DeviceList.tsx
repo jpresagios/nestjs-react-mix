@@ -69,7 +69,7 @@ const HandleDeleteOption = ({ id, onDeleteDevice }:IHandleDeleteOptionProps) => 
       onOk() {
         setLoading(true);
         deleteDevice(id)
-          .then((resp) => {
+          .then(() => {
             setLoading(false);
             onDeleteDevice(id);
           })

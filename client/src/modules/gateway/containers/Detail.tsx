@@ -37,7 +37,7 @@ export default function Detail() {
   const [visible, setVisible] = useState<boolean>(false);
 
   const { loading } = useFetch(
-    getGatewayDetail(id),
+    () => getGatewayDetail(id),
     (gateway: GatewayDetailI) => {
       setGatewayD(gateway);
     },

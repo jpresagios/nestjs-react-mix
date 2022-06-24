@@ -5,11 +5,10 @@ import { PageLoading } from '@ant-design/pro-layout';
 export interface WrapperRouteProps extends RouteProps {
   titleId: string;
   element: JSX.Element;
-  auth?: boolean;
 }
 
 const WrapperRouteComponent: FC<WrapperRouteProps> = ({
-  titleId, auth, element,
+  titleId, element,
 }) => {
   if (titleId) {
     document.title = titleId;

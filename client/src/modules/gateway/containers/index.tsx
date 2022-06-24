@@ -15,8 +15,6 @@ import GatewayList from '../component/GatewayList';
 
 const { Title } = Typography;
 
-const getGatewayPromise = getGateways();
-
 const StyledDivContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -30,7 +28,7 @@ export default function index() {
   const [data, setData] = useState<GatewayI[]>([]);
 
   const { loading } = useFetch(
-    getGatewayPromise,
+    () => getGateways(),
     (gateways: GatewayI[]) => {
       setData(gateways);
     },

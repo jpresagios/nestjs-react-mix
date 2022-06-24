@@ -12,19 +12,19 @@ const NotFound = lazy(() => importRetry(() => import('../modules/pages/404')));
 const routeList: RouteObject[] = [
   {
     path: '/',
-    element: <WrapperRouteComponent element={<Layout />} titleId="" auth />,
+    element: <WrapperRouteComponent element={<Layout />} titleId="" />,
     children: [
       {
         path: 'gateways',
-        element: <WrapperRouteComponent element={<Gateway />} titleId="Gateway list" auth />,
+        element: <WrapperRouteComponent element={<Gateway />} titleId="Gateway list" />,
       },
       {
         path: 'gateway/:id',
-        element: <WrapperRouteComponent element={<GatewayDetail />} titleId="Gateway detail" auth />,
+        element: <WrapperRouteComponent element={<GatewayDetail />} titleId="Gateway detail" />,
       },
       {
         path: '*',
-        element: <WrapperRouteComponent element={<NotFound />} titleId="Page not found" auth />,
+        element: <WrapperRouteComponent element={<NotFound />} titleId="Page not found" />,
       },
     ],
   },

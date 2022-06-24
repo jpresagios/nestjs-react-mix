@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 function useFetch<T>(
-  promise: Promise<any>,
+  promise: () => Promise<any>,
   onSuccess: (values: T) => void,
   onError: (error: Error)=>void,
   eject = true,
@@ -13,7 +13,7 @@ function useFetch<T>(
   useEffect(() => {
     if (eject) {
       setLoading(true);
-      promise
+      promise()
         .then((resp) => {
           onSuccess(resp.data);
           setLoading(false);
@@ -23,7 +23,7 @@ function useFetch<T>(
           setLoading(false);
         });
     }
-  }, [eject]);
+  }, []);
 
   return { loading };
 }
