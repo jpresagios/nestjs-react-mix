@@ -47,7 +47,7 @@ export default function Detail() {
   );
 
   const showModal = () => {
-    if (gatewayD.devices.length >= 10) {
+    if (gatewayD?.devices?.length >= 10) {
       openNotificationWithIcon('error', 'Error', 'Sorry only 10 devices maximum per gateway');
     } else {
       setVisible(true);

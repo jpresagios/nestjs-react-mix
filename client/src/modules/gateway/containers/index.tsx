@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  Card, Typography, Button, Modal, Form, Input as AntInput, Alert,
+  Card, Typography, Button, Modal, Form, Input as AntInput,
 } from 'antd';
 import {
   PlusOutlined,
@@ -24,7 +24,6 @@ export default function index() {
   const [form] = Form.useForm();
   const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
-  const [customErrors, setCustomErrors] = useState<string[]>([]);
   const [data, setData] = useState<GatewayI[]>([]);
 
   const { loading } = useFetch(
@@ -66,10 +65,18 @@ export default function index() {
         setConfirmLoading(false);
         setVisible(false);
       })
-      .catch((error) => {
-        const { statusCode, message } = error.response.data;
+      .catch((err) => {
+        const { statusCode, error } = err.response.data;
         if (+statusCode === 400) {
-          setCustomErrors(message);
+          error?.forEach((itemError: any) => {
+            form.setFields([
+              {
+                name: itemError.field,
+                touched: false,
+                errors: [itemError.message],
+              },
+            ]);
+          });
         }
         openNotificationWithIcon('error', 'Error', 'Something went wrong :(');
         setConfirmLoading(false);
@@ -103,16 +110,6 @@ export default function index() {
         onOk={handleOk}
         onCancel={handleCancel}
       >
-        {customErrors.length > 0 && (
-          <Alert
-            message="Error"
-            // eslint-disable-next-line react/no-array-index-key
-            description={<div>{customErrors.map((item, i) => <p key={i}>{item}</p>)}</div>}
-            type="error"
-            showIcon
-            style={{ marginBottom: 5 }}
-          />
-        )}
         <Form
           form={form}
           layout="vertical"
@@ -133,7 +130,14 @@ export default function index() {
           </Form.Item>
           <Form.Item
             name="ipV4"
-            rules={[{ required: true, message: 'Required' }]}
+            rules={[
+              { required: true, message: 'Required' },
+              {
+                // eslint-disable-next-line prefer-regex-literals
+                pattern: new RegExp(/\b((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\.|$)){4}\b/),
+                message: 'Ipv4 address is invalid',
+              },
+            ]}
           >
             <AntInput suffix={<span />} size="large" placeholder="IpV4" />
           </Form.Item>
