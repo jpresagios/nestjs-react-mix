@@ -85,7 +85,7 @@ describe('GateWayRepository service', () => {
   });
 
 
-  it('test /gateway repository detail method',  async () => {
+  it('test /gateway repository findById method',  async () => {
     const gateWay = gateWayFakeData[0];
 
     const gateWayResult = await gateWayServiceRepository.insert(gateWay);
