@@ -1,87 +1,49 @@
-import React, { useEffect, useRef } from 'react';
-import ProTable from '@ant-design/pro-table';
-import type { ProColumns, ActionType } from '@ant-design/pro-table';
-import styled from 'styled-components';
+import {
+  Space, Table, Button, Tooltip,
+} from 'antd';
+import { EyeOutlined } from '@ant-design/icons';
+import type { ColumnsType } from 'antd/lib/table';
 import { GatewayI } from '../../../interfaces/gateway';
-import './templateList.less';
-
-const StyledTextFirstCol = styled.span`
-  margin-left: 16px; 
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 19px;
-  color: #333333;
-`;
-
-const StyledText = styled.span`
-  font-family: Open Sans;
-  font-style: normal;
-  font-weight: normal;
-  font-size: 14px;
-  line-height: 19px;
-  color: #333333;
-`;
+import './gateway-list.less';
 
 interface GatewayListI {
   gatewayList: GatewayI[];
 }
 
 export default function GatewayList({ gatewayList }: GatewayListI) {
-  const actionRef = useRef<ActionType>();
-
-  const columns: ProColumns<GatewayI>[] = [
+  const columns: ColumnsType<GatewayI> = [
     {
-      title: <span style={{ marginLeft: 16 }}>Serial Number</span>,
+      title: 'Serial Number',
       dataIndex: 'serialNumber',
       key: 'serialNumber',
-      render: (r, record) => (
-        <StyledTextFirstCol>
-          {record?.serialNumber}
-        </StyledTextFirstCol>
-      ),
+      render: (_, { serialNumber }) => <a>{serialNumber}</a>,
     },
     {
-      title: 'name',
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
-      render: (r, record) => (
-        <StyledText>
-          {record?.name}
-        </StyledText>
-      ),
+      render: (_, { name }) => <a>{name}</a>,
     },
     {
-      title: 'ipV4',
+      title: 'IpV4',
       dataIndex: 'ipV4',
       key: 'ipV4',
-      render: (r, record) => (
-        <StyledText>
-          {record?.ipV4}
-        </StyledText>
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      align: 'center',
+      render: (_, record) => (
+        <Space size="middle">
+          <Tooltip title="Detail">
+            <Button type="primary" shape="circle" icon={<EyeOutlined />} />
+          </Tooltip>
+        </Space>
       ),
     },
   ];
 
-  useEffect(() => {
-    actionRef?.current?.reload();
-  }, [gatewayList]);
-
   return (
-    <ProTable<GatewayI>
-      className="custom-table-gateways"
-      actionRef={actionRef}
-      columns={columns}
-      rowKey="_id"
-      rowClassName={() => ('custom-row')}
-      defaultData={gatewayList || []}
-      pagination={{
-        pageSize: 10,
-      }}
-      dateFormatter="string"
-      search={false}
-      options={false}
-    />
+    <Table rowClassName="gateway-list" columns={columns} dataSource={gatewayList} />
   );
 }

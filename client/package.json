@@ -35,6 +35,7 @@
     "build:qa": "env-cmd -e qa craco build",
     "build:stage": "env-cmd -e stage craco build",
     "build:prod": "env-cmd -e prod craco build",
+    "build": "env-cmd -e prod craco build",
     "test": "craco test",
     "eject": "craco eject",
     "lint": "eslint . --ext ts --ext tsx --ext js --fix"
