@@ -1,18 +1,12 @@
-import axios from 'axios';
 import { GatewayI, IDevicePayload } from '../interfaces/gateway';
-import env from '../configs/env-config';
+import axios from '../axios';
 
-// eslint-disable-next-line import/prefer-default-export
+export const getGateways = () => axios.get('/gateway');
 
-// create axios config services
+export const createGateway = (payload: GatewayI) => axios.post('/gateway', payload);
 
-const domain = env.REACT_APP_URL;
-export const getGateways = () => axios.get(`${domain}/gateway`);
+export const getGatewayDetail = (id: string | undefined) => axios.get(`/gateway/${id}`);
 
-export const createGateway = (payload: GatewayI) => axios.post(`${domain}/gateway`, payload);
+export const createDevice = (payload: IDevicePayload) => axios.post('/device', payload);
 
-export const getGatewayDetail = (id: string | undefined) => axios.get(`${domain}/gateway/${id}`);
-
-export const createDevice = (payload: IDevicePayload) => axios.post(`${domain}/device`, payload);
-
-export const deleteDevice = (id: string) => axios.delete(`${domain}/device/${id}`);
+export const deleteDevice = (id: string) => axios.delete(`/device/${id}`);
