@@ -11,7 +11,7 @@ import { useParams } from 'react-router-dom';
 import useFetch from '../../../hooks/useFetch';
 import { getGatewayDetail, createDevice } from '../../../services/gateway';
 import { openNotificationWithIcon } from '../../../common/notifications/notifications';
-import { GatewayDetailI, DevicePayloadI } from '../../../interfaces/gateway';
+import { IGatewayDetail, IDevicePayload } from '../../../interfaces/gateway';
 import '../styles/index.less';
 import DeviceList from '../component/DeviceList';
 
@@ -25,7 +25,7 @@ const StyledDivContainer = styled.div`
 
 export default function Detail() {
   const { id } = useParams();
-  const [gatewayD, setGatewayD] = useState<GatewayDetailI>({
+  const [gatewayD, setGatewayD] = useState<IGatewayDetail>({
     _id: '',
     serialNumber: '',
     name: '',
@@ -38,7 +38,7 @@ export default function Detail() {
 
   const { loading } = useFetch(
     () => getGatewayDetail(id),
-    (gateway: GatewayDetailI) => {
+    (gateway: IGatewayDetail) => {
       setGatewayD(gateway);
     },
     (error: Error) => {
@@ -62,8 +62,8 @@ export default function Detail() {
     form.submit();
   };
 
-  const onFinish = (values: DevicePayloadI) => {
-    const payload: DevicePayloadI = {
+  const onFinish = (values: IDevicePayload) => {
+    const payload: IDevicePayload = {
       ...values,
       idGateway: id,
       status: values.status ? 'online' : 'offline',

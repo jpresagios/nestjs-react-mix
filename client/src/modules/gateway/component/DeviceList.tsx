@@ -4,20 +4,20 @@ import {
 } from 'antd';
 import { DeleteOutlined, ExclamationCircleOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/lib/table';
-import { DeviceI } from '../../../interfaces/gateway';
+import { IDevice } from '../../../interfaces/gateway';
 import { deleteDevice } from '../../../services/gateway';
 import './list-row.less';
 import { openNotificationWithIcon } from '../../../common/notifications/notifications';
 
 interface DeviceListI {
-  deviceList: DeviceI[];
+  deviceList: IDevice[];
   onDeleteDevice: (id: string)=>void
 }
 
 const { confirm } = Modal;
 
 export default function DeviceList({ deviceList, onDeleteDevice }:DeviceListI) {
-  const columns: ColumnsType<DeviceI> = [
+  const columns: ColumnsType<IDevice> = [
     {
       title: 'Uid',
       dataIndex: 'uid',

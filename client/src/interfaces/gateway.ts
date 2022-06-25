@@ -5,22 +5,22 @@ export interface GatewayI {
   ipV4: string;
 }
 
-export interface GatewayDetailI {
+export interface IGatewayDetail {
   _id: string;
   serialNumber: string;
   name: string;
   ipV4: string;
-  devices: DeviceI[];
+  devices: IDevice[];
 }
 
-export interface DeviceI {
+export interface IDevice {
   createAt: string;
   status: string;
   uid: string;
   vendor: string;
   _id: string;
 }
-export interface DevicePayloadI {
+export interface IDevicePayload {
   uid: string;
   vendor: string;
   status: string;
